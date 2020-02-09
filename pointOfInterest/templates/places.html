@@ -1,0 +1,20 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sign</title>
+</head>
+<body>
+<form action="http://127.0.0.1:8000/pointOfInterest/places/" method="post">
+{% csrf_token %}
+
+<input type="" name="place">
+<input type="submit" value="Generate">
+</form>
+<!-- <form action="http://127.0.0.1:8000/pointOfInterest/shopping/" method="post">
+	{% csrf_token %}
+	
+	<input type="" name="place">
+	<input type="submit" value="Shopping">
+</form> -->
+</body>
+</html>
