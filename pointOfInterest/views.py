@@ -30,7 +30,7 @@ def places(request):
 	origin=places.pop(0)
 	dest = '|'.join(places)
 	places = removeDestination(origin,dest,places)
-	print("New places: " ,places)
+	# print("New places: " ,places)
 	route = []
 
 	placeOrig = []
@@ -46,7 +46,78 @@ def places(request):
 			route.append(places[smallest])
 			origin = places.pop(smallest)
 	print("Route: " ,route)
-	
+
+
+	today = []
+	day_wise = {}
+	total_time = 3
+	counter = 1
+	# #dividing the routes according to the dates
+	for i in range(len(route)-1):
+		place1 = route[i]
+		place2=route[i+1]
+		
+		urlitenary = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={o}&destinations={d}&key=AIzaSyA3W-x4zqHwfCJ2xgzLvuO1MVPlWwp_XJI".format(o=place1, d = place2)
+		urlitenary = requests.get(urlitenary).json()
+		urlitenary = urlitenary['rows']
+		print(urlitenary)
+		if (len(urlitenary) > 0):
+			urlitenary = urlitenary[0]
+			urlitenary = urlitenary['elements']
+			placesDistance = ""
+			traveling = ""
+			for item in urlitenary:
+				if 'distance' in item.keys():
+					placesDistance = (item['duration'].get("text"))
+					if "day" in placesDistance:
+						total_time = 10
+						print("total time day : ", total_time)
+					elif "hours" in placesDistance:
+						hour = float(placesDistance[:2])
+						# print("hour:     " , hour)
+						traveling = ""
+						placesDistance = placesDistance[8:]
+						placesDistance = placesDistance.replace(" mins","")
+						placesDistance = placesDistance.replace(" min","")
+						
+						placesDistance = float(placesDistance)/60
+						# print("places: ",placesDistance)
+						hour += placesDistance
+						print("in hours before: ", total_time)
+						# print("hour: ",hour)
+						total_time += hour
+						total_time += 1.5
+						print("in hours after: ", total_time)
+
+					elif "hour" in placesDistance:
+						hour = float(placesDistance[:2])
+						# print("hour:     " , hour)
+						traveling = ""
+						placesDistance = placesDistance[8:]
+						placesDistance = placesDistance.replace(" mins","")
+						placesDistance = placesDistance.replace(" min","")
+						placesDistance = float(placesDistance)/60
+						hour += placesDistance
+						print("in hour before: ", total_time)
+						total_time += hour
+						total_time += 1.5
+						print("in hour after: ", total_time)
+					else:
+						# print("in elsse")
+						
+						total_time += 1.5
+						print("in else : ", total_time)
+					print(route[i])
+					print(total_time)
+					today.append(route[i])
+					if total_time >= 10 :
+						day_wise[counter]=today
+						print("dayyy: " ,today)
+						today = []
+						total_time = 3
+						counter+=1
+						
+	print("Summary: " ,day_wise)			
 	return render(request, 'places.html')
 
 def removeDestination(origin,dest,places):
@@ -58,7 +129,7 @@ def removeDestination(origin,dest,places):
 		urlData2 = urlData2['elements']
 		placesDistance = []
 		counter = 0
-		print("oriignal list", places)
+		# print("oriignal list", places)
 		for item in urlData2:
 			if 'distance' in item.keys():
 				placesDistance.append(item['distance'].get("text"))
@@ -97,15 +168,15 @@ def smallestDistance(origin,dest):
 				newplaces.append(sys.maxsize)
 			else:
 				newplaces.append(str1)
-		print("Origin:  ", origin)
-		print("Destination " , dest)
-		print(newplaces)
+		# print("Origin:  ", origin)
+		# print("Destination " , dest)
+		# print(newplaces)
 		newplaces = list(map(float, newplaces))
 		if(min(newplaces) != 9223372036854775807):
 			smallest = newplaces.index(min(newplaces))
 		else:
 			smallest = -1
-		print("smallest: ", smallest)
+		# print("smallest: ", smallest)
 
 
 		return smallest
