@@ -121,6 +121,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_PATH = os.path.join(BASE_DIR,'static')
+  # You may find this is already defined as such.
+
 TEMPLATE_DIRS = (
     os.path.join(SETTINGS_PATH, 'template'),
 )   
+
+
+STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static')
+        ]
