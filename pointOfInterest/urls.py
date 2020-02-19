@@ -5,5 +5,7 @@ from . import views
 urlpatterns = [
 	path('findPlaces/', views.findPlaces, name="findPlaces"),
 	path('places/', views.places, name="places"),
+	path('daywise/',views.daywise,name = "daywise"),
 	# path('shopping/', views.shopping, name="shopping")
 ]
+

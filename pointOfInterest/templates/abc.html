@@ -1,0 +1,12 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<h1>
+ {% for key,value in day_wise.items %}{{ value }}{% endfor %}
+</h1>
+</body>
+</html>

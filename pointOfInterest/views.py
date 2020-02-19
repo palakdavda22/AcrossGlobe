@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.shortcuts import render
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.http import HttpResponse
+from django.template import loader
 import pandas as pd
 import requests
 import io
@@ -52,6 +54,7 @@ def places(request):
 	day_wise = {}
 	total_time = 3
 	counter = 1
+
 	# #dividing the routes according to the dates
 	for i in range(len(route)-1):
 		place1 = route[i]
@@ -117,8 +120,14 @@ def places(request):
 						total_time = 3
 						counter+=1
 						
-	print("Summary: " ,day_wise)			
-	return render(request, 'places.html')
+	print("Summary: " ,day_wise)	
+	return render_to_response('card.html', {'day_wise':day_wise})
+
+def daywise(request):
+   #d = {'one':' itemone ', 'two':' itemtwo ', 'three':' itemthree '}
+   example_dictionary = {'a' : [1,2,3,4],'b':[5,6,7,8]}
+   print(example_dictionary)
+   return render_to_response('abc.html', {'example_dictionary':example_dictionary})
 
 def removeDestination(origin,dest,places):
 	urlroute = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={o}&destinations={d}&key=AIzaSyA3W-x4zqHwfCJ2xgzLvuO1MVPlWwp_XJI".format(o=origin, d = dest)
