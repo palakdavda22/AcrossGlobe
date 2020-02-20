@@ -11,8 +11,8 @@ from pandas import read_csv
 from matplotlib import pyplot as pp
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-
-
+day_wise = {}
+day_wise_latlng = {}
 def findPlaces(request):
 	return render(request, 'places.html')
 
@@ -51,7 +51,7 @@ def places(request):
 
 
 	today = []
-	day_wise = {}
+	
 	total_time = 3
 	counter = 1
 
@@ -121,6 +121,7 @@ def places(request):
 						counter+=1
 						
 	print("Summary: " ,day_wise)	
+<<<<<<< HEAD
 	return render_to_response('card.html', {'day_wise':day_wise})
 
 def daywise(request):
@@ -129,6 +130,33 @@ def daywise(request):
    print(example_dictionary)
    return render_to_response('abc.html', {'example_dictionary':example_dictionary})
 
+=======
+	day_wise_latlng = placeToLatlng(day_wise)	
+	print("latitude longitude: ", day_wise_latlng)	
+	return render(request, 'places.html',{"day_wise": day_wise})
+def placeToLatlng(day_wise):
+	i = 0
+	for day in day_wise.values():
+		
+		today = []
+		for place in day:
+			placeLatlng = {}
+			url = "https://maps.googleapis.com/maps/api/geocode/json?address={p} India &key=AIzaSyA3W-x4zqHwfCJ2xgzLvuO1MVPlWwp_XJI".format(p=place)
+			urlData = requests.get(url).json()
+			urlData = urlData['results']
+			urlData = urlData[0]
+			urlData = urlData['geometry']
+			urlData = urlData['location']
+			lat = urlData['lat']
+			lng  = urlData['lng']
+			placeLatlng["latitude"] = lat
+			placeLatlng["longitude"]=lng
+			today.append(placeLatlng)
+		day_wise_latlng[i] = today
+		i+=1
+	return day_wise_latlng
+			
+>>>>>>> 97b022d04881f7f14e4d46a88b18132da68f9d94
 def removeDestination(origin,dest,places):
 	urlroute = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={o}&destinations={d}&key=AIzaSyA3W-x4zqHwfCJ2xgzLvuO1MVPlWwp_XJI".format(o=origin, d = dest)
 	urlData2 = requests.get(urlroute).json()
@@ -215,7 +243,11 @@ def shopping(place):
 	return shoppingPlace
 
 
-	
+def DaysForRoute(request):
+	return render(request, 'daysRoute.html',{"day_wise": day_wise_latlng})
+
+
+
 
 
 
