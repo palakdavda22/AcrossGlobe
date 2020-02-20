@@ -9,6 +9,8 @@ urlpatterns = [
 	path('daywise/',views.daywise,name = "daywise"),
 =======
 	path('days/', views.DaysForRoute, name="places"),
+	path('days/day_wise/<int:vId>/', views.dayWiseRoutes),
+
 
 >>>>>>> 97b022d04881f7f14e4d46a88b18132da68f9d94
 	# path('shopping/', views.shopping, name="shopping")

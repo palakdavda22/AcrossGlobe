@@ -12,7 +12,9 @@ from matplotlib import pyplot as pp
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 day_wise = {}
-day_wise_latlng = {}
+day_wise_latlng = []
+counting = []
+
 def findPlaces(request):
 	return render(request, 'places.html')
 
@@ -132,8 +134,9 @@ def daywise(request):
 
 =======
 	day_wise_latlng = placeToLatlng(day_wise)	
-	print("latitude longitude: ", day_wise_latlng)	
-	return render(request, 'places.html',{"day_wise": day_wise})
+	print("latitude longitude: ", day_wise_latlng)
+	
+	return render(request, 'places.html',{"day_wise":day_wise_latlng,"counting":counting})
 def placeToLatlng(day_wise):
 	i = 0
 	for day in day_wise.values():
@@ -152,7 +155,7 @@ def placeToLatlng(day_wise):
 			placeLatlng["latitude"] = lat
 			placeLatlng["longitude"]=lng
 			today.append(placeLatlng)
-		day_wise_latlng[i] = today
+		day_wise_latlng.append(today)
 		i+=1
 	return day_wise_latlng
 			
@@ -244,7 +247,15 @@ def shopping(place):
 
 
 def DaysForRoute(request):
-	return render(request, 'daysRoute.html',{"day_wise": day_wise_latlng})
+	number = len(day_wise)
+	counting = []
+	for i in range(number):
+		counting.append(int(i)+1)
+	return render(request, 'daysRoute.html',{"counting":counting})
+
+def dayWiseRoutes(request,vId):
+	day = day_wise_latlng[vId-1]
+	return render(request,'todaysRoute.html',{"value":day})
 
 
 
