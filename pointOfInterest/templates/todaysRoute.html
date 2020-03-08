@@ -10,11 +10,11 @@
        * element that contains the map. */
       #map-canvas {
         height: 100%;
+        margin:auto;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
-        margin: 0;
         padding: 0;
       }
     </style>
@@ -23,12 +23,11 @@
     </script>
 </head>
 <body>
-<h1>Routes</h1>
+<h4 style="text-align: center;">Click on the button to get navigation!</h4>
 <p>{{ vId }}</p>
 <div id="map-canvas" style="width: 500px; height: 400px;"></div>
-<a><button id="get">Get Routes</button></a>
-
-
+<p>  </p>
+<a style="margin-left:580px;"><button id="get">Get Routes</button></a>
 <script>
     var stepDisplay;
 

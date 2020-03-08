@@ -11,6 +11,30 @@ from pandas import read_csv
 from matplotlib import pyplot as pp
 from django.contrib.auth.decorators import login_required
 # Create your views here.
+
+
+def history(request):
+    return render(request, 'index.html')
+
+# @login_required(login_url="/login/")
+def new_page(request):
+    loc = request.GET['city']
+    startdate = request.GET['sdate']
+    enddate = request.GET['edate']
+    url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/weatherdata/history?&dateTimeFormat=yyyy-MM-dd'T'HH%3Amm%3Ass&startDateTime={x}T00%3A00%3A00&endDateTime={y}T00%3A00%3A00&dayStartTime=0%3A0%3A00&dayEndTime=0%3A0%3A00&aggregateHours=24&collectStationContribution=false&maxDistance=80467&maxStations=3&unitGroup=us&locations={z}&key=8IW5BKDHCIDJ5KY1PHHL4W7WR".format(
+        x=startdate, y=enddate, z=loc)
+    urlData = requests.get(url).content
+    rawData = pd.read_csv(io.StringIO(urlData.decode('utf-8')))
+    print(rawData.head)
+    # series = read_csv('/home/anisha/Downloads/data_1999.csv', header=0, index_col=0)
+    # print(series.head())
+    temp = rawData['Temperature']
+    date = rawData['Date time']
+    pp.plot(date, temp)
+    pp.xticks(date, date, rotation='vertical')
+    data = pp.show()
+    return render(request, 'plot.html', {'city': loc, 'startdate': startdate, 'enddate': enddate, 'data': data})
+
 day_wise = {}
 day_wise_latlng = []
 counting = []
@@ -123,24 +147,21 @@ def places(request):
 						counter+=1
 						
 	print("Summary: " ,day_wise)	
-<<<<<<< HEAD
-	return render_to_response('card.html', {'day_wise':day_wise})
+	day_wise_latlng = placeToLatlng(day_wise)
+	return render_to_response('card.html', {'day_wise':day_wise,"counting":counting})
+
 
 def daywise(request):
    #d = {'one':' itemone ', 'two':' itemtwo ', 'three':' itemthree '}
-   example_dictionary = {'a' : [1,2,3,4],'b':[5,6,7,8]}
-   print(example_dictionary)
-   return render_to_response('abc.html', {'example_dictionary':example_dictionary})
+   day_wise_latlng = placeToLatlng(day_wise)
+   print("latitude longitude: ", day_wise_latlng)
+   return render(request, 'todaysRoute.html',{"day_wise":day_wise_latlng,"counting":counting})
 
-=======
-	day_wise_latlng = placeToLatlng(day_wise)	
-	print("latitude longitude: ", day_wise_latlng)
-	
-	return render(request, 'places.html',{"day_wise":day_wise_latlng,"counting":counting})
+
 def placeToLatlng(day_wise):
 	i = 0
 	for day in day_wise.values():
-		
+	
 		today = []
 		for place in day:
 			placeLatlng = {}
@@ -159,7 +180,6 @@ def placeToLatlng(day_wise):
 		i+=1
 	return day_wise_latlng
 			
->>>>>>> 97b022d04881f7f14e4d46a88b18132da68f9d94
 def removeDestination(origin,dest,places):
 	urlroute = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={o}&destinations={d}&key=AIzaSyA3W-x4zqHwfCJ2xgzLvuO1MVPlWwp_XJI".format(o=origin, d = dest)
 	urlData2 = requests.get(urlroute).json()

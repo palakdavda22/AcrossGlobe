@@ -2,9 +2,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <title></title>
   <style>
     @import url('https://fonts.googleapis.com/css?family=Heebo:400,700|Open+Sans:400,700');
+    
 
 :root {
   --color: #3c3163;
@@ -203,51 +206,97 @@ a {
   </style>
 </head>
 <body>
+  <div class="s002">
+        <form action="{% url 'my_function' %}">
+            <!--{% csrf_token %}-->
+        <div class="inner-form">
+         <!-- <div class="input-field first-wrap">
+            <div class="icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+              </svg>
+            </div>
+        <input id="search" type="search" name="city" placeholder="Which City are you looking for?"/>
+          </div>-->
+          <div class="input-field first-wrap">
+            <div class="icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"></path>
+              </svg>
+            </div>
+              <input class="datepicker" id="depart" type="text" name="sdate" placeholder="29 Aug 2018"/>
+          </div>
+          <div class="input-field second-wrap">
+            <div class="icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"></path>
+              </svg>
+            </div>
+              <input class="datepicker" id="return" type="text" name="edate" placeholder="30 Aug 2018"/>
+          </div>
+          <div class="input-field fifth-wrap">
+            <button class="btn-search" type="submit" onclick="myFunction()">Weather Alert</button>
+          </div>
+        </div>
+        <p id="demo"></p>
+      </form>
+    </div>
 <!--<section class="info">
   <img src="https://codetheweb.blog/assets/img/icon2.png">
   <h1>Learn HTML &mdash; <a href="https://codetheweb.blog/" target="_blank">Code The Web</a></h1>
+
+
 </section>-->
+<div class="btn-group">
+  <button type="button" class="btn btn-info btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  Minimize Days
+  </button>
+  <div class="dropdown-menu">
+    {% for key, value in day_wise.items %}
+    <a class="dropdown-item" href="#">Day {{key}}</a>
+    {% endfor %}
+  </div>
+</div>
+
+<button type="button" class="btn btn-danger btn-lg">Finalize</button>
 <section class="cards-wrapper">
+{% for key, value in day_wise.items %}
   <div class="card-grid-space">
-    <div class="num"> Day 1</div>
+    <div class="num"> Day {{key}}</div>
     <a class="card" href="https://codetheweb.blog/2017/10/06/html-syntax/" style="--bg-img: url(https://images.unsplash.com/photo-1526772662000-3f88f10405ff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80)">
       <div>
         <ul>
-        {% for key, value in day_wise.items %}
-        <li>{{value.0}}</li>
+          {% for i in value %}
+        <li>{{i}}</li>
         {% endfor %}
         </ul>
         </div>
     </a>
   </div>
-  <div class="card-grid-space">
-    <div class="num">Day 2</div>
-    <a class="card" href="https://codetheweb.blog/2017/10/09/basic-types-of-html-tags/" style="--bg-img: url('https://wallpapercave.com/wp/wp2004047.jpg')">
-      <div>
-      <ul>
-      {% for key,value in day_wise.items %}
-      <li>{{value.1}}</li>
-      {% endfor %}
-      </ul>
-
-
-      </div>
-    </a>
-  </div>
-
-  <div class="card-grid-space">
-    <div class="num">Day 3</div>
-    <a class="card" href="https://codetheweb.blog/2017/10/06/html-syntax/" style="--bg-img: url(https://images.unsplash.com/photo-1526772662000-3f88f10405ff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80)">
-      <div>
-        <ul>
-        {% for key, value in day_wise.items %}
-        <li>{{value.2}}</li>
-        {% endfor %}
-        </ul>
-        </div>
-    </a>
-  </div>
+{% endfor %}
   <!-- https://images.unsplash.com/photo-1520839090488-4a6c211e2f94?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=38951b8650067840307cba514b554ba5&auto=format&fit=crop&w=1350&q=80 -->
 </section>  
+<script src="{% static 'js/extention/choices.js' %}"></script>
+    <script src="{% static 'js/extention/flatpickr.js' %}"></script>
+    <script>
+      flatpickr(".datepicker",
+      {});
+
+    </script>
+    <script>
+      const choices = new Choices('[data-trigger]',
+      {
+        searchEnabled: false,
+        itemSelectText: '',
+      });
+    </script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
+
+
+
